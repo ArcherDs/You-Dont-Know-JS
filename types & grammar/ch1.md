@@ -7,7 +7,12 @@ Most developers would say that a dynamic language (like JS) does not have *types
 >
 > An ECMAScript language type corresponds to values that are directly manipulated by an ECMAScript programmer using the ECMAScript language. The ECMAScript language types are Undefined, Null, Boolean, String, Number, and Object.
 
-Now, if you're a fan of strongly typed (statically typed) languages, you may object to this usage of the word "type." In those languages, "type" means a whole lot *more* than it does here in JS.
+Now, if you're a fan of strongly typed ~~(statically typed)~~ languages, you may object to this usage of the word "type." In those languages, "type" means a whole lot *more* than it does here in JS.
+>#1176 So saying that a strong typed language is static is not necessarily true.Samples:
+Erlang is Strong-Dynamically typed
+C is Weak-Static typed (because of void*)
+
+
 
 Some people say JS shouldn't claim to have "types," and they should instead be called "tags" or perhaps "subtypes".
 

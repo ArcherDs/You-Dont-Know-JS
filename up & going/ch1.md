@@ -343,7 +343,12 @@ The easiest way to go about that in your program is to assign a value to a symbo
 
 In some programming languages, you declare a variable (container) to hold a specific type of value, such as `number` or `string`. *Static typing*, otherwise known as *type enforcement*, is typically cited as a benefit for program correctness by preventing unintended value conversions.
 
-Other languages emphasize types for values instead of variables. *Weak typing*, otherwise known as *dynamic typing*, allows a variable to hold any type of value at any time. It's typically cited as a benefit for program flexibility by allowing a single variable to represent a value no matter what type form that value may take at any given moment in the program's logic flow.
+Other languages emphasize types for values instead of variables. ~~*Weak typing*, otherwise known as~~ *dynamic typing*, allows a variable to hold any type of value at any time. It's typically cited as a benefit for program flexibility by allowing a single variable to represent a value no matter what type form that value may take at any given moment in the program's logic flow.
+
+>#1176 Static/Strong: OCaml/Haskell
+Static/Weak: C++/Java/C# (in most ways, they are kind of a mix)
+Dynamic/Strong: Python/Erlang
+Dynamic/Weak: Javascript/LUA
 
 JavaScript uses the latter approach, *dynamic typing*, meaning variables can hold values of any *type* without any *type* enforcement.
 
@@ -365,7 +370,8 @@ console.log( amount );		// "$199.98"
 
 The `amount` variable starts out holding the number `99.99`, and then holds the `number` result of `amount * 2`, which is `199.98`.
 
-The first `console.log(..)` command has to *implicitly* coerce that `number` value to a `string` to print it out.
+~~The first `console.log(..)` command has to *implicitly* coerce that `number` value to a `string` to print it out.~~
+>#395 console.log doesn't coerce values, it can take any data type and displays it as such.--tested in chrome
 
 Then the statement `amount = "$" + String(amount)` *explicitly* coerces the `199.98` value to a `string` and adds a `"$"` character to the beginning. At this point, `amount` now holds the `string` value `"$199.98"`, so the second `console.log(..)` statement doesn't need to do any coercion to print it out.
 
@@ -750,6 +756,8 @@ function formatAmount(amount) {
 
 // keep buying phones while you still have money
 while (amount < bank_balance) {
+  //#456 while (amount + PHONE_PRICE < bank_balance) {  maybe still not perfect
+
 	// buy a new phone!
 	amount = amount + PHONE_PRICE;
 

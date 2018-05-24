@@ -45,6 +45,13 @@ typeof a;				// "undefined"
 
 a = { b: "c" };
 typeof a;				// "object"
+
+//#845
+a = function () { };
+typeof a;                             // "function" -- actually a sub-type of object. See below. 
+
+a = [1, 2, 3];
+typeof a;                             // "object" -- array is a special type of object. See below.
 ```
 
 The return value from the `typeof` operator is always one of six (seven as of ES6! - the "symbol" type) string values. That is, `typeof "abc"` returns `"string"`, not `string`.
@@ -268,6 +275,7 @@ To boil down a whole lot of details to a few simple takeaways, and help you know
 * If either value (aka side) in a comparison could be the `true` or `false` value, avoid `==` and use `===`.
 * If either value in a comparison could be of these specific values (`0`, `""`, or `[]` -- empty array), avoid `==` and use `===`.
 * In *all* other cases, you're safe to use `==`. Not only is it safe, but in many cases it simplifies your code in a way that improves readability.
+>#866 "If you're OK with the different representations of the same value, == is your friend. If you really need to distinguish between 42 and "42", that's fine too, just don't use == coercive equality."
 
 What these rules boil down to is requiring you to think critically about your code and about what kinds of values can come through variables that get compared for equality. If you can be certain about the values, and `==` is safe, use it! If you can't be certain about the values, use `===`. It's that simple.
 
@@ -917,6 +925,7 @@ function foo() {
 ```
 
 As you can see, it checks to see if the `arguments[0]` value is `void 0` (aka `undefined`), and if so provides the `2` default value; otherwise, it assigns whatever was passed.
+>#983 As you can see, it checks to see if the `arguments[0]` value is Not `void 0` (aka `undefined`), and if so assigns whatever was passed;otherwise, it provides the `2` default value.
 
 In addition to being able to now use the nicer syntax even in older browsers, looking at the transpiled code actually explains the intended behavior more clearly.
 
