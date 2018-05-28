@@ -33,6 +33,16 @@ var id = "not awesome";
 obj.cool(); // awesome
 
 setTimeout( obj.cool, 100 ); // not awesome
+
+//#655 the above example is confusing ,to make it clear,use this one
+var obj = {
+  id: 'awesome',
+  cool: () => { console.log( this.id ) }
+}
+var id = 'not awesome'
+
+obj.cool()           // not awesome
+setTimeout( obj.cool, 1000)   // not awesome
 ```
 
 The problem is the loss of `this` binding on the `cool()` function. There are various ways to address that problem, but one often-repeated solution is `var self = this;`.

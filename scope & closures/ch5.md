@@ -547,6 +547,10 @@ function hello(who) {
 }
 
 export hello;
+//export default hello
+
+//#636 Accordingly to MDN, export hello; should be export { hello }; or export default hello;
+
 ```
 
 **foo.js**

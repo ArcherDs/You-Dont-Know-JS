@@ -119,6 +119,17 @@ function foo(str) {
 }
 
 foo( "var a = 2" );
+
+//#179 The following steps are performed when control enters the execution context for eval code:
+//If there is no calling context or if the eval code is not being evaluated by a direct call (15.1.2.1.1) to the eval function then,
+//Initialise the execution context as if it was a global execution context using the eval code as C as described in 10.4.1.1.
+function foo(str) {
+   "use strict";
+   var e = eval;
+   e( str );
+   console.log( a );// will write 2
+}
+foo( "var a = 2" );
 ```
 
 There are other facilities in JavaScript which amount to a very similar effect to `eval(..)`. `setTimeout(..)` and `setInterval(..)` *can* take a string for their respective first argument, the contents of which are `eval`uated as the code of a dynamically-generated function. This is old, legacy behavior and long-since deprecated. Don't do it!

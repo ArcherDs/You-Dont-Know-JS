@@ -197,7 +197,7 @@ While this all may sound like nothing more than interesting academic trivia, it 
 Function declarations that appear inside of normal blocks typically hoist to the enclosing scope, rather than being conditional as this code implies:
 
 ```js
-foo(); // "b"
+foo(); // "b"  //#199 #270 error
 
 var a = true;
 if (a) {
@@ -209,6 +209,8 @@ else {
 ```
 
 However, it's important to note that this behavior is not reliable and is subject to change in future versions of JavaScript, so it's probably best to avoid declaring functions in blocks.
+
+>#199 #270 In an ES2015 environment, a function declaration inside of a block will be scoped inside that block. The code in the question will result in an undefined function error because the function a is only declared within the scope of if statements and therefore doesn't exist in the global scope.
 
 ## Review (TL;DR)
 

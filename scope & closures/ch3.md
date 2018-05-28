@@ -122,6 +122,8 @@ foo();
 
 The `i = 3` assignment inside of `bar(..)` overwrites, unexpectedly, the `i` that was declared in `foo(..)` at the for-loop. In this case, it will result in an infinite loop, because `i` is set to a fixed value of `3` and that will forever remain `< 10`.
 
+>#379 Actually, i is not really a "fixed value" of 3.. it's set to 3 each loop, and then the i++ updates it to 4 before the next iteration sets it back to 4. Clear up the misleading wording in that paragraph.
+
 The assignment inside `bar(..)` needs to declare a local variable to use, regardless of what identifier name is chosen. `var i = 3;` would fix the problem (and would create the previously mentioned "shadowed variable" declaration for `i`). An *additional*, not alternate, option is to pick another identifier name entirely, such as `var j = 3;`. But your software design may naturally call for the same identifier name, so utilizing scope to "hide" your inner declaration is your best/only option in that case.
 
 #### Global "Namespaces"
@@ -264,6 +266,7 @@ var a = 2;
 
 console.log( a ); // 2
 ```
+>#594 The other ways to prove why an IIFE is necessary are much more exotic, such as needing to be able to early-return, or temporarily override a this binding, etc 
 
 There's a slight variation on the traditional IIFE form, which some prefer: `(function(){ .. }())`. Look closely to see the difference. In the first form, the function expression is wrapped in `( )`, and then the invoking `()` pair is on the outside right after it. In the second form, the invoking `()` pair is moved to the inside of the outer `( )` wrapping pair.
 
