@@ -62,6 +62,7 @@ function issue223() {
 function issue208() {
   'use strict';
   //this values of primitives in strict mode are not boxed,
+  //When a function was called with call or apply, if the value was a primitive value, this one was boxed into an object (or the global object for undefined and null). In strict mode, the value is passed directly without conversion or replacement.
 
   function foo() {
     console.log(typeof this);

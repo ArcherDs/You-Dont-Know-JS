@@ -123,7 +123,7 @@ myObject.a;		// 2
 myObject["a"];	// 2
 ```
 
-To access the value at the *location* `a` in `myObject`, we need to use either the `.` operator or the `[ ]` operator. The `.a` syntax is usually referred to as "property" access, whereas the `["a"]` syntax is usually referred to as "key" access. In reality, they both access the same *location*, and will pull out the same value, `2`, so the terms can be used interchangeably. We will use the most common term, "property access" from here on.
+To access the value at the *location* `a` in `myObject`, we need to use either the `.` operator or the `[ ]` operator. The `.a` syntax is usually referred to as "property" access, whereas the `["a"]` syntax is usually referred to as "key" access. In reality, they both access the same *location* and will pull out the same value, `2`, so the terms can be used interchangeably. We will use the most common term, "property access", from here on.
 
 The main difference between the two syntaxes is that the `.` operator requires an `Identifier` compatible property name after it, whereas the `[".."]` syntax can take basically any UTF-8/unicode compatible string as the name for the property. To reference a property of the name "Super-Fun!", for instance, you would have to use the `["Super-Fun!"]` access syntax, as `Super-Fun!` is not a valid `Identifier` property name.
 
@@ -162,9 +162,9 @@ myObject["[object Object]"];	// "baz"
 
 ### Computed Property Names
 
-The `myObject[..]` property access syntax we just described is useful if you need to use a computed expression value *as* the key name, like `myObject[prefix + name]`. But that's not really helpful when declaring objects using the object-literal syntax.
+The `myObject[..]` property access syntax we just described is useful if you need to use a computed expression value *as* the key name, like `myObject[prefix + name]`. However, that's not really helpful when declaring objects using the object-literal syntax.
 
-ES6 adds *computed property names*, where you can specify an expression, surrounded by a `[ ]` pair, in the key-name position of an object-literal declaration:
+ES6 adds *computed property names*, which you can use to specify an expression, surrounded by a `[ ]` pair, in the key-name position of an object-literal declaration:
 
 ```js
 var prefix = "foo";
@@ -178,7 +178,7 @@ myObject["foobar"]; // hello
 myObject["foobaz"]; // world
 ```
 
-The most common usage of *computed property names* will probably be for ES6 `Symbol`s, which we will not be covering in detail in this book. In short, they're a new primitive data type which has an opaque unguessable value (technically a `string` value). You will be strongly discouraged from working with the *actual value* of a `Symbol` (which can theoretically be different between different JS engines), so the name of the `Symbol`, like `Symbol.Something` (just a made up name!), will be what you use:
+The most common usage of *computed property names* will probably be for ES6 `Symbol`s, which we will not be covering in detail in this book. In short, a `Symbol` is a new primitive data type that has an opaque unguessable value (technically a `string` value). You will be strongly discouraged from working with the *actual value* of a `Symbol` (which can theoretically be different between different JS engines), so the name of the `Symbol`, like `Symbol.Something` (just a made up name!), will be what you use:
 
 ```js
 var myObject = {
@@ -188,7 +188,7 @@ var myObject = {
 
 ### Property vs. Method
 
-Some developers like to make a distinction when talking about a property access on an object, if the value being accessed happens to be a function. Because it's tempting to think of the function as *belonging* to the object, and in other languages, functions which belong to objects (aka, "classes") are referred to as "methods", it's not uncommon to hear, "method access" as opposed to "property access".
+Some developers like to make a distinction when talking about a property access on an object, if the value being accessed happens to be a function. Because it's tempting to think that the function *belongs* to the object, and because, in other languages, functions that belong to objects (aka "classes") are referred to as "methods", it's not uncommon to hear "method access" as opposed to "property access".
 
 **The specification makes this same distinction**, interestingly.
 
@@ -218,7 +218,7 @@ someFoo;			// function foo(){..}
 myObject.someFoo;	// function foo(){..}
 ```
 
-`someFoo` and `myObject.someFoo` are just two separate references to the same function, and neither implies anything about the function being special or "owned" by any other object. If `foo()` above was defined to have a `this` reference inside it, that `myObject.someFoo` *implicit binding* would be the **only** observable difference between the two references. Neither reference really makes sense to be called a "method".
+`someFoo` and `myObject.someFoo` are just two separate references to the same function, and neither implies anything about the function being special or "owned" by any other object. If `foo()` above was defined to have a `this` reference inside it, that `myObject.someFoo` *implicit binding* would be the **only** observable difference between the two references. In neither case does it make sense to call the reference a "method".
 
 **Perhaps one could argue** that a function *becomes a method*, not at definition time, but during run-time just for that invocation, depending on how it's called at its call-site (with an object reference context or not -- see Chapter 2 for more details). Even this interpretation is a bit of a stretch.
 
@@ -462,7 +462,10 @@ The final `defineProperty(..)` call results in a TypeError, regardless of `stric
 
 **Note:** There's a nuanced exception to be aware of: even if the property is already `configurable:false`, `writable` can always be changed from `true` to `false` without error, but not back to `true` if already `false`.
 
-Another thing `configurable:false` prevents is the ability to use the `delete` operator to remove an existing property.
+~~Another thing `configurable:false` prevents is the ability to use the `delete` operator to remove an existing property.~~
+>#483 Also, configurable:false prevents you from using the delete operator to remove an existing property.
+
+
 
 ```js
 var myObject = {
@@ -605,11 +608,11 @@ myObject.b; // undefined
 
 From a *value* perspective, there is no difference between these two references -- they both result in `undefined`. However, the `[[Get]]` operation underneath, though subtle at a glance, potentially performed a bit more "work" for the reference `myObject.b` than for the reference `myObject.a`.
 
-Inspecting only the value results, you cannot distinguish whether a property exists and holds the explicit value `undefined`, or whether the property does *not* exist and `undefined` was the default return value after `[[Get]]` failed to return something explicitly. However, we will see shortly how you *can* distinguish these two scenarios.
+Inspecting only the value results, you cannot distinguish whether a property exists and holds the explicit value `undefined`, or whether the property does *not* exist and `undefined` was the default return value after `[[Get]]` failed to return something explicitly. However, we will see shortly how you *can* distinguish between these two scenarios.
 
 ### `[[Put]]`
 
-Since there's an internally defined `[[Get]]` operation for getting a value from a property, it should be obvious there's also a default `[[Put]]` operation.
+Since there's an internally defined `[[Get]]` operation for getting a value from a property, it should be obvious that there's also a default `[[Put]]` operation.
 
 It may be tempting to think that an assignment to a property on an object would just invoke `[[Put]]` to set or create that property on the object in question. But the situation is more nuanced than that.
 
@@ -794,7 +797,8 @@ Object.getOwnPropertyNames( myObject ); // ["a", "b"]
 
 Whereas `in` vs. `hasOwnProperty(..)` differ in whether they consult the `[[Prototype]]` chain or not, `Object.keys(..)` and `Object.getOwnPropertyNames(..)` both inspect *only* the direct object specified.
 
-There's (currently) no built-in way to get a list of **all properties** which is equivalent to what the `in` operator test would consult (traversing all properties on the entire `[[Prototype]]` chain, as explained in Chapter 5). You could approximate such a utility by recursively traversing the `[[Prototype]]` chain of an object, and for each level, capturing the list from `Object.keys(..)` -- only enumerable properties.
+There's (currently) no built-in way to get a list of **all properties** which is equivalent to what the `in` operator test would consult (traversing all properties on the entire `[[Prototype]]` chain, as explained in Chapter 5). You could approximate such a utility by recursively traversing the `[[Prototype]]` chain of an object, and for each level, capturing the list from ~~`Object.keys(..)`~~`Object.getOwnPropertyNames(..)` -- only enumerable properties.
+>#1271 there's no built-in way to get all the properties from the whole prototype chain (which is what both forms of in do). There's actually two different kinds of lists you might want to get: any existing property (the in test) or any enumerable property (the for..in loop).If you wanted to get the any-property list (emulating the in operator),you'd want to use the getOwnPropertyNames(..). If you wanted to get the enumerable-property list (emulating the for..in loop), you'd want to use Object.keys(..).
 
 ## Iteration
 

@@ -142,6 +142,8 @@ Let's set aside biological parents and children, and look at inheritance through
 Let's revisit the `Vehicle` and `Car` discussion from earlier in this chapter. Consider this loose pseudo-code (invented syntax) for inherited classes:
 
 ```js
+//This is not JS. This is pseudo code.
+//#699
 class Vehicle {
 	engines = 1
 

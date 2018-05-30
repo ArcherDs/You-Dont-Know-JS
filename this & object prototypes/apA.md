@@ -153,6 +153,9 @@ Ehh... maybe, maybe not. If you, like most JS devs, start assigning functions ar
 
 And depending on what sorts of syntactic approaches you take to these assignments, there may very well be cases where the `super` can't be properly bound (at least, not where you suspect), so you may (at time of writing, TC39 discussion is ongoing on the topic) have to manually bind `super` with `toMethod(..)` (kinda like you have to do `bind(..)` for `this` -- see Chapter 2).
 
+>#320 toMethod(..) has gone away entirely
+
+
 You're used to being able to assign around methods to different objects to *automatically* take advantage of the dynamism of `this` via the *implicit binding* rule (see Chapter 2). But the same will likely not be true with methods that use `super`.
 
 Consider what `super` should do here (against `D` and `E`):
@@ -164,7 +167,9 @@ class P {
 
 class C extends P {
 	foo() {
-		super.foo();
+		super();
+		//super.foo()
+		//#320 super.foo() instead of just super() in non-constructors.
 	}
 }
 

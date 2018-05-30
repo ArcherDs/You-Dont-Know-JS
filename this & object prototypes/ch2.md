@@ -158,6 +158,8 @@ One of the most common frustrations that `this` binding creates is when an *impl
 Consider:
 
 ```js
+console.log(this)     //#250
+
 function foo() {
 	console.log( this.a );
 }
@@ -173,6 +175,7 @@ var a = "oops, global"; // `a` also property on global object
 
 bar(); // "oops, global"
 ```
+>#250  running node test.js vs cat test.js | node. The first one has node running the file as module (this===exports), the second one has a node REPL open up and pipe in the code through the use of cat then run in global (this===global).
 
 Even though `bar` appears to be a reference to `obj.foo`, in fact, it's really just another reference to `foo` itself. Moreover, the call-site is what matters, and the call-site is `bar()`, which is a plain, un-decorated call and thus the *default binding* applies.
 
@@ -225,6 +228,17 @@ function setTimeout(fn,delay) {
 	// wait (somehow) for `delay` milliseconds
 	fn(); // <-- call-site!
 }
+
+//#427 In ch2, "Implicitly Lost", the last example suggests that setTimeout(..) causes the this to be lost (and thus bound to window) because of a theoretical call-site of fn(). However, this is not what setTimeout(..) actually does. It's verifiable that even if the example in question is run in strict mode, "oops, global" is still printed. That's because the web platform actually says that setTimeout(..) explicitly binds the this to the global object.
+//This is a case where the outcome is correct, but my explanation of how that happens is incorrect.
+//Technically, this is more what happens
+function setTimeout(fn,delay) {
+    // wait (somehow) for `delay` milliseconds
+    fn.call(window); // <-- call-site!
+}
+//Note: node/iojs doesn't follow the web platform spec here, so the this they explicitly bind is not the global. Ugh.
+
+
 ```
 
 It's quite common that our function callbacks *lose* their `this` binding, as we've just seen. But another way that `this` can surprise us is when the function we've passed our callback to intentionally changes the `this` for the call. Event handlers in popular JavaScript libraries are quite fond of forcing your callback to have a `this` which points to, for instance, the DOM element that triggered the event. While that may sometimes be useful, other times it can be downright infuriating. Unfortunately, these tools rarely let you choose.
@@ -539,6 +553,8 @@ if (!Function.prototype.bind) {
 					(
 						this instanceof fNOP &&
 						oThis ? this : oThis
+						//this instanceof fNOP ? this : oThis
+						//#470 no need
 					),
 					aArgs.concat( Array.prototype.slice.call( arguments ) )
 				);
@@ -559,7 +575,10 @@ The part that's allowing `new` overriding is:
 
 ```js
 this instanceof fNOP &&
-oThis ? this : oThis
+oThis ? this : 
+
+//this instanceof fNOP ? this : 
+//#470 no need
 
 // ... and:
 
